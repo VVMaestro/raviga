@@ -25,6 +25,10 @@
   const currentPositionCoordinates = ref<LngLat>([0, 0]);
 
   const mapClickHandler: DomEventHandler = (object, event) => {
+    if (object?.type === 'marker') {
+      return;
+    }
+
     currentPositionCoordinates.value = event.coordinates;
 
     onMapClick?.(event.coordinates);
@@ -38,7 +42,7 @@
 
       <yandex-map-default-features-layer />
       
-      <yandex-map-listener :settings="{ onClick: mapClickHandler}" />
+      <yandex-map-listener :settings="{ onClick: mapClickHandler }" />
       
       <yandex-map-clusterer>
         <yandex-map-marker
@@ -47,9 +51,7 @@
           :settings="{coordinates: geometry.coordinates}"
           :draggable="true"
         >
-          <div class="w-28 border-4 border-amber-50 bg-amber-50 shadow-2xl shadow-black">
-            <img :src="url" />
-          </div>
+          <photo :url="url" />
         </yandex-map-marker>
 
         <template #cluster="{length}">
